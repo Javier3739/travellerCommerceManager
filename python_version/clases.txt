@@ -1,23 +1,40 @@
 BDMANAGER
 	- conexion SQLITE_CONNECTION
-	* nueva_aventura
+	* guardar_aventura
 	* cargar_aventura
-	* modificar_aventura
 	* eliminar_aventura
 	* cargar_bien
 	* cambiar_bien
+	* nueva_regla
+	* modificar_regla
+	* borrar_regla
+	* nuevo_intervalo
+	* cargar_intervalo
+	* modificar_intervalo
+	* borrar_intervalo
+	* nueva_flota
+	* cargar_flota
+	* modificar_flota
+	* eliminar_flota
+	
 
 AVENTURA:
-    - id INT PRIMARY KEY
+    - id INT
     - nombre STR
     - narrador STR
     - fecha_estelar DATE
     - bienes <BIEN>list
-    - reglas <REGLA>list
+    - reglas (<REGLA>list)dict # las claves son los ámbitos
+    - flotas <FLOTA>list
 	* VOID __init__(id INT, nombre STR, narrador STR=None, fecha_estelar DATE)
 	* VOID cambiar_nombre(nombre STR)
 	* VOID cambiar_fecha (nueva_fecha DATE)
 	* VOID avanzar_fecha (dias INT)
+	* BOOL bien_existe(nombre STR)
+	* BOOL flota_existe(nombre STR)
+	* BOOL nave_existe(nombre STR)
+	* VOID mover_nave(flota_origen STR, flota_destino STR)
+	# vigilar que no haya 2 casos donde, para una nave dada, haya 2 fecha_finalizacion NULL
 
 BIEN:
 	- id INT 
@@ -25,11 +42,11 @@ BIEN:
     - peso INT
     - auxiliar_necesario FLOAT
     - camarotes_ocupados INT
-    - valores <int>list
+    - valores <int>dict # los índices son los saltos
     * VOID __init__(id INT, nombre STR, peso INT, auxiliar_necesario FLOAT, camarotes_ocupados INT)
     #getters y setters, excepto un setter de id.
 
-TIPO: ENUM("planetario", "flota", ...)
+TIPO: ENUM("planetario", "flota", "nave", ...)
 AMBITO: ENUM("comercio", "pasajeros", "correo", ...)
 
 REGLA:
@@ -39,6 +56,71 @@ REGLA:
 	- nombre VARCHAR(50)
 	- intervalos <INTERVALO>list
 	- esta_activo BOOL
-	* VOID __init__(id, tipo STR, ambito STR, nombre STR="", esta_activo BOOL)
-	* INT aplicar_regla(contexto OBJ)
-	* 
+	* VOID __init__(id, tipo STR, ambito STR, nombre STR, esta_activo BOOL)
+	* {bono INT, descripcion STR} aplicar_regla(contexto OBJ)
+	* VOID activar(VOID)
+	* VOID desactivar(VOID)
+	#getters y setters de tipo, ambito, nombre y esta_activo
+
+INTERVALO:
+	- minimo INT
+	- maximo INT
+	- descripcion STR
+	- bono INT
+	* VOID __init__(minimo INT=None, maximo INT=None, descripcion STR, bono INT = 0)
+	* {bono INT, descripcion STR} aplicar(INT valor) # None si no aplica
+
+FLOTA:
+    - id INT 
+    - nombre STR
+    - esta_activa BOOL
+    - mayor_rango_marina INT
+    - mayor_rango_explorador INT
+    - mayor_rango_broker INT
+    - mayor_rango_socializar INT
+    - mayor_rango_callejeo INT
+    - mayor_bono_soc INT
+    - planeta_actual STR
+    - naves <NAVE>list
+    * VOID __init__(id INT, nombre STR, esta_activa BOOL, mayor_rango_marina INT, mayor_rango_explorador INT, mayor_rango_broker INT, mayor_rango_socializar INT, mayor_rango_callejeo INT, mayor_bono_soc INT, planeta_actual STR)
+    * VOID viajar(nuevo_sistema STR)
+    # getters y setters de todo menos de id
+    
+
+NAVE:
+    - id INT AUTO_INCREMENT PRIMARY KEY
+    - nombre VARCHAR(80) NOT NULL
+    - carga_maxima INT NOT NULL CHECK (carga_maxima > 0)
+    - auxiliar_total INT NOT NULL
+    - mayor_auxiliar INT NOT NULL
+    - camarotes_totales INT NOT NULL CHECK (camarotes_totales > 0)
+    - literas_frias INT NOT NULL CHECK (literas_frias >= 0)
+    - combustible INT NOT NULL CHECK (combustible > 0)
+    - salto INT NOT NULL CHECK (salto >= 0)
+    - armado BOOL NOT NULL
+    - mantenimiento INT NOT NULL CHECK (mantenimiento > 0)
+    - hipoteca INT NOT NULL CHECK (hipoteca >= 0)
+    - fin_hipo DATE NOT NULL
+
+
+
+PAQUETE:
+    - id INT AUTO_INCREMENT PRIMARY KEY
+    - nombre VARCHAR(150) NOT NULL
+    - carga INT NOT NULL
+    - auxiliar_necesario INT NOT NULL
+    - camarotes_ocupados INT NOT NULL
+    - notas TEXT
+    - nave INT NOT NULL
+    FOREIGN KEY (nave) REFERENCES nave(id)
+    
+
+OPERACION:
+    - id INT AUTO_INCREMENT PRIMARY KEY
+    - nombre VARCHAR(200) INT NOT NULL
+    - importe INT NOT NULL
+    - fecha DATE NOT NULL
+    - activo BOOL NOT NULL
+    - notas TEXT
+    - aventura INT NOT NULL
+    FOREIGN KEY (aventura) REFERENCES aventura(id)

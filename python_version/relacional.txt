@@ -1,13 +1,13 @@
 #aventura 0 -> por defecto
 AVENTURA:
     - id INT AUTO_INCREMENT PRIMARY KEY
-    - nombre VARCHAR(60) NOT NULL
+    - nombre VARCHAR(60) NOT NULL CHECK (trim(nombre) <> "")
     - narrador VARCHAR(80)
     - fecha_estelar DATE NOT NULL
 
 BIEN:
 	- id INT AUTO_INCREMENT PRIMARY KEY
-    - nombre VARCHAR(60)
+    - nombre VARCHAR(60) NOT NULL CHECK (trim(nombre) <> "")
     - peso INT NOT NULL CHECK (peso >= 0)
     - auxiliar_necesario FLOAT NOT NULL CHECK (auxiliar_necesario >= 0)
     - camarotes_ocupados INT NOT NULL CHECK (camarotes_ocupados >= 0)
@@ -20,27 +20,30 @@ VALOR:
     - saltos INT NOT NULL
     - bien INT NOT NULL
     FOREIGN KEY (bien) REFERENCES bien(id)
-    UNIQUE(bien, saltos)
+    PRIMARY KEY (bien, saltos)
 
 REGLA:
 	- id INT AUTO_INCREMENT PRIMARY KEY
 	- tipo TIPO NOT NULL # planetario, flota, etc.
 	- ambito AMBITO NOT NULL # comercio, pasajeros, correo, etc.
-	- nombre VARCHAR(50)
+	- nombre VARCHAR(50) NOT NULL CHECK (trim(nombre) <> "")
 	- esta_activo BOOL NOT NULL
+	- campo_objetivo VARCHAR(30) NOT NULL CHECK (trim(campo_objetivo) <> "")
 	- aventura INT NOT NULL
 	FOREIGN KEY (aventura) REFERENCES aventura(id)
 
+# minimo o maximo NULL -> sin mínimo o máximo. En Python será None
 INTERVALO:
+	- id INT AUTO_INCREMENT PRIMARY KEY
 	- minimo INT
 	- maximo INT
-	- descripcion VARCHAR(20)
+	- descripcion VARCHAR(20) NOT NULL CHECK (trim(descripcion) <> "")
 	- bono INT NOT NULL
 	FOREIGN KEY (regla) REFERENCES regla(id)
 
 FLOTA:
     - id INT AUTO_INCREMENT PRIMARY KEY
-    - nombre VARCHAR(60) NOT NULL
+    - nombre VARCHAR(60) NOT NULL CHECK (trim(nombre) <> "")
     - esta_activa BOOL NOT NULL
     - aventura INT NOT NULL
     - mayor_rango_marina INT NOT NULL
@@ -49,13 +52,18 @@ FLOTA:
     - mayor_rango_socializar INT NOT NULL
     - mayor_rango_callejeo INT NOT NULL
     - mayor_bono_soc INT NOT NULL
-    - planetaActual VARCHAR(10) NOT NULL
     FOREIGN KEY (aventura) REFERENCES aventura(id)
     UNIQUE(nombre, aventura)
 
+REGISTRO_VIAJE
+	- flota INT NOT NULL
+	- fecha DATE NOT NULL
+	- sistema CHAR(9) NOT NULL CHECK (trim(sistema) <> "")
+	FOREIGN KEY (flota) REFERENCES flota(id)
+
 NAVE:
     - id INT AUTO_INCREMENT PRIMARY KEY
-    - nombre VARCHAR(80) NOT NULL
+    - nombre VARCHAR(80) NOT NULL CHECK (trim(nombre) <> "")
     - carga_maxima INT NOT NULL CHECK (carga_maxima > 0)
     - auxiliar_total INT NOT NULL
     - mayor_auxiliar INT NOT NULL
@@ -75,13 +83,14 @@ NAVE_EN_FLOTA:
     - nave INT NOT NULL
     - flota INT NOT NULL
     - fecha_incorporacion DATE NOT NULL
+    - fecha_finalizacion DATE NULL # NULL (por defecto) significa que sigue allí
     FOREIGN KEY (nave) REFERENCES nave(id)
     FOREIGN KEY (flota) REFERENCES flota(id)
     PRIMARY KEY (nave, flota, fecha_incorporacion)
 
 PAQUETE:
     - id INT AUTO_INCREMENT PRIMARY KEY
-    - nombre VARCHAR(150) NOT NULL
+    - nombre VARCHAR(150) NOT NULL CHECK (trim(nombre) <> "")
     - carga INT NOT NULL
     - auxiliar_necesario INT NOT NULL
     - camarotes_ocupados INT NOT NULL
@@ -91,7 +100,7 @@ PAQUETE:
 
 OPERACION:
     - id INT AUTO_INCREMENT PRIMARY KEY
-    - nombre VARCHAR(200) INT NOT NULL
+    - concepto VARCHAR(200) INT NOT NULL CHECK (trim(concepto) <> "")
     - importe INT NOT NULL
     - fecha DATE NOT NULL
     - activo BOOL NOT NULL
