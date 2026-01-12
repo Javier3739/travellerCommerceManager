@@ -1,0 +1,44 @@
+BDMANAGER
+	- conexion SQLITE_CONNECTION
+	* nueva_aventura
+	* cargar_aventura
+	* modificar_aventura
+	* eliminar_aventura
+	* cargar_bien
+	* cambiar_bien
+
+AVENTURA:
+    - id INT PRIMARY KEY
+    - nombre STR
+    - narrador STR
+    - fecha_estelar DATE
+    - bienes <BIEN>list
+    - reglas <REGLA>list
+	* VOID __init__(id INT, nombre STR, narrador STR=None, fecha_estelar DATE)
+	* VOID cambiar_nombre(nombre STR)
+	* VOID cambiar_fecha (nueva_fecha DATE)
+	* VOID avanzar_fecha (dias INT)
+
+BIEN:
+	- id INT 
+    - nombre STR
+    - peso INT
+    - auxiliar_necesario FLOAT
+    - camarotes_ocupados INT
+    - valores <int>list
+    * VOID __init__(id INT, nombre STR, peso INT, auxiliar_necesario FLOAT, camarotes_ocupados INT)
+    #getters y setters, excepto un setter de id.
+
+TIPO: ENUM("planetario", "flota", ...)
+AMBITO: ENUM("comercio", "pasajeros", "correo", ...)
+
+REGLA:
+	- id INT
+	- tipo TIPO
+	- ambito AMBITO
+	- nombre VARCHAR(50)
+	- intervalos <INTERVALO>list
+	- esta_activo BOOL
+	* VOID __init__(id, tipo STR, ambito STR, nombre STR="", esta_activo BOOL)
+	* INT aplicar_regla(contexto OBJ)
+	* 
