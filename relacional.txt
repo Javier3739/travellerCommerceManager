@@ -1,0 +1,80 @@
+BIENES:
+    - nombre VARCHAR(60) PRIMARY KEY
+    - peso INT NOT NULL
+    - auxiliar_necesario FLOAT NOT NULL
+    - camarotes_ocupados INT NOT NULL
+
+VALOR:
+    - precio INT NOT NULL
+    - saltos INT NOT NULL
+    - nombre VARCHAR(60) NOT NULL
+    FOREIGN KEY (nombre) REFERENCES bienes(nombre)
+    UNIQUE(nombre, saltos)
+
+AVENTURA:
+    - id INT AUTO_INCREMENT PRIMARY KEY
+    - nombre VARCHAR(60) NOT NULL
+    - narrador VARCHAR(80)
+    - fecha_estelar DATE NOT NULL
+
+FLOTA:
+    - id INT AUTO_INCREMENT PRIMARY KEY
+    - nombre VARCHAR(60) NOT NULL
+    - esta_activa BOOL NOT NULL
+    - aventura INT NOT NULL
+    - mayor_rango_marina INT NOT NULL
+    - mayor_rango_explorador INT NOT NULL
+    - mayor_rango_broker INT NOT NULL
+    - mayor_rango_socializar INT NOT NULL
+    - mayor_rango_callejeo INT NOT NULL
+    - mayor_bono_soc INT NOT NULL
+    - planetaActual VARCHAR(10) NOT NULL
+    FOREIGN KEY (aventura) REFERENCES aventura(id)
+    UNIQUE(nombre, aventura)
+
+NAVE:
+    - id INT AUTO_INCREMENT PRIMARY KEY
+    - nombre VARCHAR(80) NOT NULL
+    - carga_maxima INT NOT NULL
+    - auxiliar_total INT NOT NULL
+    - mayor_auxiliar INT NOT NULL
+    - camarotes_totales INT NOT NULL
+    - camarotes_utiles INT NOT NULL
+    - literas_frias INT NOT NULL
+    - combustible INT NOT NULL
+    - salto INT NOT NULL
+    - armado BOOL NOT NULL
+    - carga VARCHAR(200)
+    - mantenimiento INT NOT NULL
+    - hipoteca INT NOT NULL
+    - duracion_hipo INT NOT NULL
+    - aventura INT NOT NULL
+    UNIQUE(nombre, aventura)
+    FOREIGN KEY (aventura) REFERENCES aventura(id)
+
+NAVE_EN_FLOTA:
+    - nave INT
+    - flota INT
+    - fecha_incorporacion DATE
+    FOREIGN KEY (nave) REFERENCES nave(id)
+    FOREIGN KEY (flota) REFERENCES flota(id)
+
+PAQUETE:
+    - id INT AUTO_INCREMENT PRIMARY KEY
+    - nombre VARCHAR(150) NOT NULL
+    - carga INT NOT NULL
+    - auxiliar_necesario INT NOT NULL
+    - camarotes_ocupados INT NOT NULL
+    - notas TEXT
+    - nave INT NOT NULL
+    FOREIGN KEY (nave) REFERENCES nave(id)
+
+OPERACION:
+    - id INT AUTO_INCREMENT PRIMARY KEY
+    - nombre VARCHAR(200) INT NOT NULL
+    - importe INT NOT NULL
+    - fecha DATE NOT NULL
+    - activo BOOL NOT NULL
+    - notas TEXT
+    - aventura INT NOT NULL
+    FOREIGN KEY (aventura) REFERENCES aventura(id)
