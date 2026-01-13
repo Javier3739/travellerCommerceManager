@@ -1,4 +1,4 @@
-BDMANAGER
+/*BDMANAGER
 	- conexion SQLITE_CONNECTION
 	* guardar_aventura
 	* cargar_aventura
@@ -15,8 +15,13 @@ BDMANAGER
 	* nueva_flota
 	* cargar_flota
 	* modificar_flota
-	* eliminar_flota
-	
+	* eliminar_flota*/
+
+PRINCIPAL:
+	- aventura AVENTURA
+	* VOID nueva_aventura(nombre STR)
+	* <STR>list mostrar_aventuras(VOID)
+	* <
 
 AVENTURA:
     - id INT
@@ -33,7 +38,10 @@ AVENTURA:
 	* BOOL bien_existe(nombre STR)
 	* BOOL flota_existe(nombre STR)
 	* BOOL nave_existe(nombre STR)
-	* VOID mover_nave(flota_origen STR, flota_destino STR)
+	* VOID mover_flota(nombre_flota STR, destino STR)
+	* INT calcular_modificador_pasajeros(nombre_flota STR)
+	* INT calcular_cantidad_pasajeros(tirada INT)
+    
 	# vigilar que no haya 2 casos donde, para una nave dada, haya 2 fecha_finalizacion NULL
 
 BIEN:
@@ -84,6 +92,7 @@ FLOTA:
     - naves <NAVE>list
     * VOID __init__(id INT, nombre STR, esta_activa BOOL, mayor_rango_marina INT, mayor_rango_explorador INT, mayor_rango_broker INT, mayor_rango_socializar INT, mayor_rango_callejeo INT, mayor_bono_soc INT, planeta_actual STR)
     * VOID viajar(nuevo_sistema STR)
+	* 
     # getters y setters de todo menos de id
     
 
