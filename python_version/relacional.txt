@@ -4,6 +4,7 @@ AVENTURA:
     - nombre VARCHAR(60) NOT NULL CHECK (trim(nombre) <> "")
     - narrador VARCHAR(80)
     - fecha_estelar DATE NOT NULL
+    UNIQUE (aventura)
 
 BIEN:
 	- id INT AUTO_INCREMENT PRIMARY KEY
@@ -107,3 +108,20 @@ OPERACION:
     - notas TEXT
     - aventura INT NOT NULL
     FOREIGN KEY (aventura) REFERENCES aventura(id)
+
+<aventura>
+    <bien>
+        <valor/>
+    </bien>
+    <regla>
+        <intervalo/>
+    </regla>
+    <flota>
+        <registro_viaje/>
+    </flota>
+    <nave>
+        <nave_en_flota foreign="flota"/>
+        <paquete/>
+    </nave>
+    <operacion/>
+</aventura>

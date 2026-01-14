@@ -1,4 +1,4 @@
-/*BDMANAGER
+/*GESTORBASE
 	- conexion SQLITE_CONNECTION
 	* guardar_aventura
 	* cargar_aventura
@@ -19,6 +19,7 @@
 
 PRINCIPAL:
 	- aventura AVENTURA
+    - base_datos GESTORBASE
 	* VOID nueva_aventura(nombre STR)
 	* <STR>list mostrar_aventuras(VOID)
 	* <
@@ -31,6 +32,7 @@ AVENTURA:
     - bienes <BIEN>list
     - reglas (<REGLA>list)dict # las claves son los ámbitos
     - flotas <FLOTA>list
+    - dinero <INT>
 	* VOID __init__(id INT, nombre STR, narrador STR=None, fecha_estelar DATE)
 	* VOID cambiar_nombre(nombre STR)
 	* VOID cambiar_fecha (nueva_fecha DATE)
@@ -110,7 +112,7 @@ NAVE:
     - mantenimiento INT NOT NULL CHECK (mantenimiento > 0)
     - hipoteca INT NOT NULL CHECK (hipoteca >= 0)
     - fin_hipo DATE NOT NULL
-
+    - paquetes <PAQUETE>list
 
 
 PAQUETE:
@@ -120,16 +122,27 @@ PAQUETE:
     - auxiliar_necesario INT NOT NULL
     - camarotes_ocupados INT NOT NULL
     - notas TEXT
-    - nave INT NOT NULL
-    FOREIGN KEY (nave) REFERENCES nave(id)
     
 
-OPERACION:
+/*OPERACION:
     - id INT AUTO_INCREMENT PRIMARY KEY
     - nombre VARCHAR(200) INT NOT NULL
     - importe INT NOT NULL
     - fecha DATE NOT NULL
     - activo BOOL NOT NULL
-    - notas TEXT
-    - aventura INT NOT NULL
-    FOREIGN KEY (aventura) REFERENCES aventura(id)
+    - notas TEXT*/
+
+<principal>
+    <aventura>
+        <bien/>
+        <regla>
+            <intervalo/>
+        </regla>
+        <flota>
+            <nave>
+                <paquete/>
+            </nave>
+        </flota>
+    </aventura>
+</principal>
+
