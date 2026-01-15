@@ -9,6 +9,7 @@ class Modelo(object):
     def __init__(self):
         self.aventura = None
         self.base_datos = GestorBase(RUTA_BD)
+
     def nueva_aventura(self, nombre, fecha_estelar, narrador=None):
         aventura = Aventura.nueva_aventura(nombre, fecha_estelar, narrador)
         av_id = self.base_datos.nueva_aventura(aventura)
@@ -30,6 +31,7 @@ class Modelo(object):
         for aventura in aventuras:
             l.append(aventura["nombre"])
         return l
+
     def cargar_aventura(self, nombre):
         datos = self.base_datos.cargar_aventura(nombre)
         self.aventura = Aventura.cargar_aventura(datos)
@@ -90,4 +92,18 @@ class Modelo(object):
         for datos_fl in l:
             flota = Flota.cargar_flota(datos_fl))
             flota.establecer_naves()
-        
+    def eliminar_flota(self, nombre):
+        if self.aventura == None:
+            raise AdventureNotSelected()
+        encontrado = False
+        for flota in self.aventura.flotas:
+            if flota.nombre == nombre:
+                encontrado = True
+                if flota.naves != []:
+                    raise ValueError("Flota no vacía. Solo se pueden eliminar flotas que no tienen naves. ")
+                else:
+                    self.aventuras.flotas.pop(flota)
+                    self.base_datos.borrar_flota(flota)
+        else:
+            raise ValueError("No hallado. No se ha encontrado una flota con ese nombre. ")
+    def nueva_nave(self)

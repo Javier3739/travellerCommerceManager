@@ -2,5 +2,5 @@ class AdventureNotSelectedError(Exception):
     def __init__(self, msg=""):
         self.args = msg
     def __str__(self):
-        return ("Adventure Not Selected: You must select an adventure before doing this action. "
+        return ("Aventura no seleccionada. Debes seleccionar una para realizar esta acción. "
  + str(self.args))
