@@ -33,13 +33,18 @@ AVENTURA:
     - reglas (<REGLA>list)dict # las claves son los ámbitos
     - flotas <FLOTA>list
     - dinero <INT>
+    - lugares <LUGAR>dict
+    - registro_integrantes REGISTRO_INTEGRANTES
+    - registro_viajes REGISTRO_VIAJES
+    - registro_paquetes REGISTRO_PAQUETES
+    - registro_transacciones REGISTRO_TRANSACCIONES
 	* VOID __init__(id INT, nombre STR, narrador STR=None, fecha_estelar DATE)
 	* VOID cambiar_nombre(nombre STR)
 	* VOID cambiar_fecha (nueva_fecha DATE)
 	* VOID avanzar_fecha (dias INT)
 	* BOOL bien_existe(nombre STR)
 	* BOOL flota_existe(nombre STR)
-	* BOOL nave_existe(nombre STR)
+	* BOOL lugar_existe(nombre STR)
 	* VOID mover_flota(nombre_flota STR, destino STR)
 	* INT calcular_modificador_pasajeros(nombre_flota STR)
 	* INT calcular_cantidad_pasajeros(tirada INT)
@@ -58,6 +63,7 @@ BIEN:
 
 TIPO: ENUM("planetario", "flota", "nave", ...)
 AMBITO: ENUM("comercio", "pasajeros", "correo", ...)
+ESPACIO: ENUM("mercado", "nave")
 
 REGLA:
 	- id INT
@@ -97,10 +103,14 @@ FLOTA:
 	* 
     # getters y setters de todo menos de id
     
-
-NAVE:
+LUGAR:
     - id INT AUTO_INCREMENT PRIMARY KEY
-    - nombre VARCHAR(80) NOT NULL
+    - nombre VARCHAR(80) NOT NULL CHECK (trim(nombre) <> "")
+    - tipo ESPACIO NOT NULL
+    - aventura INT NOT NULL
+
+NAVE (LUGAR):
+    - id INT AUTO_INCREMENT PRIMARY KEY
     - carga_maxima INT NOT NULL CHECK (carga_maxima > 0)
     - auxiliar_total INT NOT NULL
     - mayor_auxiliar INT NOT NULL
@@ -112,8 +122,19 @@ NAVE:
     - mantenimiento INT NOT NULL CHECK (mantenimiento > 0)
     - hipoteca INT NOT NULL CHECK (hipoteca >= 0)
     - fin_hipo DATE NOT NULL
-    - paquetes <PAQUETE>list
 
+REGISTRO_INTEGRANTES:
+    - nave INT NOT NULL
+    - flota INT NOT NULL
+    - fecha_incorporacion DATE NOT NULL
+    - fecha_finalizacion DATE NULL # NULL (por defecto) significa que sigue allí
+
+REGISTRO_VIAJES:
+	- flota INT NOT NULL
+	- fecha DATE NOT NULL
+	- sistema INT NOT NULL
+	FOREIGN KEY (flota) REFERENCES flota(id)
+    FOREIGN KEY (sistema) REFERENCES mercado(id)
 
 PAQUETE:
     - id INT AUTO_INCREMENT PRIMARY KEY
@@ -122,27 +143,47 @@ PAQUETE:
     - auxiliar_necesario INT NOT NULL
     - camarotes_ocupados INT NOT NULL
     - notas TEXT
-    
 
-/*OPERACION:
+MERCADO(LUGAR):
+    - id INT NOT NULL
+    - codigo_planeta CHAR(9) NOT NULL  
+
+REGISTRO_TRANSACCIONES:
     - id INT AUTO_INCREMENT PRIMARY KEY
-    - nombre VARCHAR(200) INT NOT NULL
+    - nombre VARCHAR(200) NOT NULL
     - importe INT NOT NULL
     - fecha DATE NOT NULL
     - activo BOOL NOT NULL
-    - notas TEXT*/
+    - notas TEXT
+    * VOID activar()
+    * VOID desactivar()
 
-<principal>
+REGISTRO_PAQUETES:
+    - paquete INT NOT NULL
+    - lugar INT NOT NULL
+    - fecha_incorporacion DATE NOT NULL
+    - fecha_finalizacion DATE NULL # NULL (por defecto) significa que sigue allí
+    CHECK ((SELECT count(*) FROM paquete_en_lugar AS p WHERE p.paquete = paquete AND p.lugar = lugar AND p.fecha_finalizacion IS NULL) <= 1)
+    FOREIGN KEY (paquete) REFERENCES paquete(id)
+    FOREIGN KEY (lugar) REFERENCES lugar(id)
+    PRIMARY KEY (paquete, lugar, fecha_incorporacion)
+
+<modelo>
     <aventura>
         <bien/>
         <regla>
             <intervalo/>
         </regla>
-        <flota>
-            <nave>
-                <paquete/>
-            </nave>
-        </flota>
+        <registro_paquetes/>
+        <registro_integrantes/>
+        <registro_viajes/>
+        <registro_transacciones/>
+        <flota/>
+        <lugar>
+            <mercado/>
+            <nave depends="flota"/>
+            <paquete/>
+        </lugar>
     </aventura>
-</principal>
+</modelo>
 

@@ -59,12 +59,21 @@ FLOTA:
 REGISTRO_VIAJE
 	- flota INT NOT NULL
 	- fecha DATE NOT NULL
-	- sistema CHAR(9) NOT NULL CHECK (trim(sistema) <> "")
+	- sistema INT NOT NULL
 	FOREIGN KEY (flota) REFERENCES flota(id)
+    FOREIGN KEY (sistema) REFERENCES mercado(id)
 
-NAVE:
+# espacio: mercado o nave
+LUGAR:
     - id INT AUTO_INCREMENT PRIMARY KEY
     - nombre VARCHAR(80) NOT NULL CHECK (trim(nombre) <> "")
+    - tipo ESPACIO NOT NULL
+    - aventura INT NOT NULL
+    UNIQUE(nombre, aventura)
+    FOREIGN KEY (aventura) REFERENCES aventura(id)
+
+NAVE:
+    - id INT NOT NULL
     - carga_maxima INT NOT NULL CHECK (carga_maxima > 0)
     - auxiliar_total INT NOT NULL
     - mayor_auxiliar INT NOT NULL
@@ -76,9 +85,8 @@ NAVE:
     - mantenimiento INT NOT NULL CHECK (mantenimiento > 0)
     - hipoteca INT NOT NULL CHECK (hipoteca >= 0)
     - fin_hipo DATE NOT NULL
-    - aventura INT NOT NULL
-    UNIQUE(nombre, aventura)
-    FOREIGN KEY (aventura) REFERENCES aventura(id)
+    FOREIGN KEY (id) REFERENCES LUGAR_PAQUETE(id)
+    
 
 NAVE_EN_FLOTA:
     - nave INT NOT NULL
@@ -87,7 +95,14 @@ NAVE_EN_FLOTA:
     - fecha_finalizacion DATE NULL # NULL (por defecto) significa que sigue allí
     FOREIGN KEY (nave) REFERENCES nave(id)
     FOREIGN KEY (flota) REFERENCES flota(id)
+    CHECK ((SELECT count(*) FROM nave_en_flota AS n 
+WHERE n.nave = nave AND n.fecha_finalizacion IS NULL) <= 1)
     PRIMARY KEY (nave, flota, fecha_incorporacion)
+
+MERCADO:
+    - id INT NOT NULL
+    - codigo_planeta CHAR(9) NOT NULL
+    FOREIGN KEY (id) REFERENCES lugar_paquete(id)
 
 PAQUETE:
     - id INT AUTO_INCREMENT PRIMARY KEY
@@ -98,6 +113,17 @@ PAQUETE:
     - notas TEXT
     - nave INT NOT NULL
     FOREIGN KEY (nave) REFERENCES nave(id)
+
+PAQUETE_EN_LUGAR:
+    - paquete INT NOT NULL
+    - lugar INT NOT NULL
+    - fecha_incorporacion DATE NOT NULL
+    - fecha_finalizacion DATE NULL # NULL (por defecto) significa que sigue allí
+    CHECK ((SELECT count(*) FROM paquete_en_lugar AS p 
+WHERE p.paquete = paquete AND p.fecha_finalizacion IS NULL) <= 1)
+    FOREIGN KEY (paquete) REFERENCES paquete(id)
+    FOREIGN KEY (lugar) REFERENCES lugar(id)
+    PRIMARY KEY (paquete, lugar, fecha_incorporacion)
 
 OPERACION:
     - id INT AUTO_INCREMENT PRIMARY KEY
@@ -119,9 +145,14 @@ OPERACION:
     <flota>
         <registro_viaje/>
     </flota>
-    <nave>
-        <nave_en_flota foreign="flota"/>
-        <paquete/>
-    </nave>
+    <lugar>
+        <mercado/>
+        <nave>
+            <nave_en_flota foreign="flota"/>
+            <paquete>
+                <paquete_en_lugar foreign="mercado"/>
+            </paquete>
+        </nave>
+    </lugar>
     <operacion/>
 </aventura>
