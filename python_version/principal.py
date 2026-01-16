@@ -42,7 +42,10 @@ class Modelo(object):
         for flota in aventura.flotas:
             l += flota.mostrar_naves()
         aventura.establecer_lugares(l)
-        aventura.establecer_registro_integrantes(self.cargar_registro_integrantes()
+        aventura.establecer_registro_integrantes(self.cargar_registro_integrantes())
+        aventura.establecer_registro_viajes(self.cargar_registro_viajes())
+        aventura.establecer_registro_paquetes(self.cargar_registro_paquetes())
+        aventura.establecer_registro_transacciones(self.cargar_registro_transacciones())
     def eliminar_aventura(self, nombre):
         if (aventura.nombre == nombre)
             self.aventura = None
@@ -71,14 +74,14 @@ class Modelo(object):
             self.base_datos.borrar_flota(flota["id"])
     def crear_flota(self, nombre, rangos_navieros, capacidades_grupo):
         if self.aventura == None:
-            raise AdventureNotSelected()
+            raise AdventureNotSelectedError()
         flota = Flota.nueva_flota(nombre, rangos_navieros, capacidades_grupo)
         self.aventura.aniade_flota(flota)
         id_fl = self.base_datos.nueva_flota(flota, self.aventura)
         flota.establecer_id(id_fl)
     def devolver_flotas(self):
         if self.aventura == None:
-            raise AdventureNotSelected()
+            raise AdventureNotSelectedError()
         if self.aventura != None:
             l = []
             for flota in self.aventura.flotas:
@@ -86,15 +89,20 @@ class Modelo(object):
             return l
     def cargar_flotas(self):
         if self.aventura == None:
-            raise AdventureNotSelected()
+            raise AdventureNotSelectedError()
         l = self.base_datos.mostrar_flotas(self.aventura.id)
         flotas = []
         for datos_fl in l:
             flota = Flota.cargar_flota(datos_fl))
-            flota.establecer_naves()
+            datos_naves = self.base_datos.cargar_naves(flota)
+            naves = []
+            for datos_nave in datos_naves:
+                nave = Nave.cargar_nave(datos_nave)
+                naves.append(nave)
+            flota.aniade_naves(naves)
     def eliminar_flota(self, nombre):
         if self.aventura == None:
-            raise AdventureNotSelected()
+            raise AdventureNotSelectedError()
         encontrado = False
         for flota in self.aventura.flotas:
             if flota.nombre == nombre:
@@ -106,4 +114,4 @@ class Modelo(object):
                     self.base_datos.borrar_flota(flota)
         else:
             raise ValueError("No hallado. No se ha encontrado una flota con ese nombre. ")
-    def nueva_nave(self)
+    def nueva_nave(self):
