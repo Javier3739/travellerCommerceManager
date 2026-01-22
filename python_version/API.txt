@@ -1,0 +1,114 @@
+# interacción con aventuras: común
+#comunes
+<str>list mostrar_aventuras(void)
+void nueva_aventura(str nombre, date fecha_estelar, str narrador="") raises ErrorNombreYaExiste
+void cargar_aventura(str nombre) raises ErrorNombreNoEncontrado
+# este método requiere triple verificación en la GUI para que el usuario no lo use sin querer.
+void borrar_aventura(str nombre) raises ErrorNombreNoEncontrado
+#menos comunes
+void cambiar_nombre_aventura(str nuevo_nombre) raises ErrorAventuraNoSeleccionada, ErrorNombreYaExiste
+void cambiar_narrador(str nuevo_nombre) raises ErrorAventuraNoSeleccionada
+void cambiar_fecha_estelar(date nueva_fecha) raises ErrorAventuraNoSeleccionada
+#poco comunes
+void rollback(date nueva_fecha) raises ValueError, ErrorAventuraNoSeleccionada
+void salto_en_el_tiempo(date nueva_fecha) raises ValueError, ErrorAventuraNoSeleccionada
+void avanzar_dias(int dias) raises ValueError, ErrorAventuraNoSeleccionada
+
+# interactuar con la tabla de bienes: poco común
+# menos comunes
+<dict>list ver_bienes(void) raises ErrorAventuraNoSeleccionada
+# poco comunes
+void cambiar_peso(int nuevo_peso) raises ValueError, ErrorAventuraNoSeleccionada
+void cambiar_auxiliar(int nuevo_auxiliar) raises ValueError, ErrorAventuraNoSeleccionada
+void cambiar_camarotes(int nuevo_req_camar) raises ValueError, ErrorAventuraNoSeleccionada
+void cambiar_pago(int nuevo_valor, int saltos) raises ValueError, ErrorAventuraNoSeleccionada
+
+# interactuar con las reglas: poco común
+# menos comunes
+<str>list ver_reglas(void) raises ErrorAventuraNoSeleccionada
+<dict>list ver_detalles_regla(int id_regla) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+void importar_reglas_json(JSON nuevas_reglas) raises JSONParseError, ErrorAventuraNoSeleccionada
+void importar_reglas_aventura(int id_av) raises ErrorAventuraNoSeleccionada
+# poco comunes
+void nueva_regla(TIPO tipo, AMBITO ambito, str nombre) raises ErrorAventuraNoSeleccionada, ValueError
+void borrar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+void activar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+void desactivar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+void modificar_intervalos_regla(int id, <dict>list intervalos) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ValueError
+
+# interactuar con las flotas: común
+#comunes
+mostrar_flotas
+nueva_flota
+borrar_flota
+entregar_paquetes
+saltar
+#menos comunes
+activar_flota
+desactivar_flota
+cambiar_rango_piloto
+cambiar_habilidades_tripulacion
+
+
+# interactuar con el registro de viaje: menos común
+# comunes
+ver_registro_viajes_flota
+
+# interactuar con los lugares (comunes de naves y mercados) 
+transferir_paquete_a
+cambiar_nombre
+crear_paquete_especial
+
+# interactuar con las naves: menos común
+# comunes
+nueva_nave
+cargar_nave
+eliminar_nave
+# menos comunes
+tirar_paquete
+entregar_paquete # destruye el paquete y cobra el pago por la entrega.
+transferir_paquete_a # heredado, transfiere algo entre naves, o carga y descarga del mercado, por ejemplo.
+# poco comunes
+cambiar_carga_maxima
+cambiar_auxiliar_total
+cambiar_mayor_auxiliar
+cambiar_camarotes_totales
+cambiar_literas_frias
+cambiar_combustible
+cambiar_salto
+armar_nave
+desarmar_nave
+cambiar_mantenimiento
+cambiar_hipoteca
+refinanciar_hipoteca
+
+cambiar_nombre # heredado
+crear_paquete_especial # heredado
+
+#interactuar con el registro de flotas: menos común
+#común
+ver_registro_miembros_flota
+
+#interactuar con el mercado: común
+# comunes:
+cargar_bienes_disponibles
+#transferir_paquete_a # heredado
+# menos comunes:
+calcular_bono_pasajeros
+calcular_dados_pasajeros
+calcular_bono_mercancias
+calcular_dados_mercancias
+calcular_bono_correo
+calcular_bienes_disponibles
+modificar_bienes_disponibles
+cambiar_codigo_planeta
+
+#interactuar con el registro de paquetes
+ver_registro_paquetes
+
+#interactuar con el registro contable
+ver_registro_operaciones
+nueva_operacion
+activar_operacion
+desactivar_operacion
+cambiar_notas

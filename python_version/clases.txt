@@ -180,9 +180,12 @@ REGISTRO_PAQUETES:
         <registro_transacciones/>
         <flota/>
         <lugar>
-            <mercado/>
-            <nave depends="flota"/>
-            <paquete/>
+		    <mercado from="lugar">
+		    	<paquete/>
+		    </mercado>
+		    <nave from="lugar" depends="flota">
+		    	<paquete/>
+		    </nave>
         </lugar>
     </aventura>
 </modelo>

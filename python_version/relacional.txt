@@ -4,6 +4,7 @@ AVENTURA:
     - nombre VARCHAR(60) NOT NULL CHECK (trim(nombre) <> "")
     - narrador VARCHAR(80)
     - fecha_estelar DATE NOT NULL
+    - maximo_rollback_seguro DATE NOT NULL
     UNIQUE (aventura)
 
 BIEN:
@@ -42,6 +43,7 @@ INTERVALO:
 	- bono INT NOT NULL
 	FOREIGN KEY (regla) REFERENCES regla(id)
 
+# "desguace" -> naves de baja de cada aventura.
 FLOTA:
     - id INT AUTO_INCREMENT PRIMARY KEY
     - nombre VARCHAR(60) NOT NULL CHECK (trim(nombre) <> "")
@@ -72,7 +74,7 @@ LUGAR:
     UNIQUE(nombre, aventura)
     FOREIGN KEY (aventura) REFERENCES aventura(id)
 
-NAVE:
+NAVE(LUGAR):
     - id INT NOT NULL
     - carga_maxima INT NOT NULL CHECK (carga_maxima > 0)
     - auxiliar_total INT NOT NULL
@@ -85,7 +87,7 @@ NAVE:
     - mantenimiento INT NOT NULL CHECK (mantenimiento > 0)
     - hipoteca INT NOT NULL CHECK (hipoteca >= 0)
     - fin_hipo DATE NOT NULL
-    FOREIGN KEY (id) REFERENCES LUGAR_PAQUETE(id)
+    FOREIGN KEY (id) REFERENCES lugar(id)
     
 
 NAVE_EN_FLOTA:
@@ -99,10 +101,10 @@ NAVE_EN_FLOTA:
 WHERE n.nave = nave AND n.fecha_finalizacion IS NULL) <= 1)
     PRIMARY KEY (nave, flota, fecha_incorporacion)
 
-MERCADO:
+MERCADO(LUGAR):
     - id INT NOT NULL
     - codigo_planeta CHAR(9) NOT NULL
-    FOREIGN KEY (id) REFERENCES lugar_paquete(id)
+    FOREIGN KEY (id) REFERENCES lugar(id)
 
 PAQUETE:
     - id INT AUTO_INCREMENT PRIMARY KEY
