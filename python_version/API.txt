@@ -1,10 +1,10 @@
 # interacción con aventuras: común
 #comunes
-<str>list mostrar_aventuras(void)
+<{int id, str nombre}>list mostrar_aventuras(void)
 void nueva_aventura(str nombre, date fecha_estelar, str narrador="") raises ErrorNombreYaExiste
-void cargar_aventura(str nombre) raises ErrorNombreNoEncontrado
+void seleccionar_aventura(int id) raises ErrorIDNoEncontrado
 # este método requiere triple verificación en la GUI para que el usuario no lo use sin querer.
-void borrar_aventura(str nombre) raises ErrorNombreNoEncontrado
+void borrar_aventura(int id) raises ErrorIDNoEncontrado
 #menos comunes
 void cambiar_nombre_aventura(str nuevo_nombre) raises ErrorAventuraNoSeleccionada, ErrorNombreYaExiste
 void cambiar_narrador(str nuevo_nombre) raises ErrorAventuraNoSeleccionada
@@ -13,10 +13,11 @@ void cambiar_fecha_estelar(date nueva_fecha) raises ErrorAventuraNoSeleccionada
 void rollback(date nueva_fecha) raises ValueError, ErrorAventuraNoSeleccionada
 void salto_en_el_tiempo(date nueva_fecha) raises ValueError, ErrorAventuraNoSeleccionada
 void avanzar_dias(int dias) raises ValueError, ErrorAventuraNoSeleccionada
+void procesar_saltos(void)
 
 # interactuar con la tabla de bienes: poco común
 # menos comunes
-<dict>list ver_bienes(void) raises ErrorAventuraNoSeleccionada
+<{id int, nombre str, peso int, auxiliar float, camarotes int, pago int}>list ver_bienes(void) raises ErrorAventuraNoSeleccionada
 # poco comunes
 void cambiar_peso(int nuevo_peso) raises ValueError, ErrorAventuraNoSeleccionada
 void cambiar_auxiliar(int nuevo_auxiliar) raises ValueError, ErrorAventuraNoSeleccionada
@@ -25,7 +26,7 @@ void cambiar_pago(int nuevo_valor, int saltos) raises ValueError, ErrorAventuraN
 
 # interactuar con las reglas: poco común
 # menos comunes
-<str>list ver_reglas(void) raises ErrorAventuraNoSeleccionada
+<{id int, nombre str}>list ver_reglas(void) raises ErrorAventuraNoSeleccionada
 <dict>list ver_detalles_regla(int id_regla) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
 void importar_reglas_json(JSON nuevas_reglas) raises JSONParseError, ErrorAventuraNoSeleccionada
 void importar_reglas_aventura(int id_av) raises ErrorAventuraNoSeleccionada
@@ -38,11 +39,13 @@ void modificar_intervalos_regla(int id, <dict>list intervalos) raises ErrorIDNoE
 
 # interactuar con las flotas: común
 #comunes
-mostrar_flotas
-nueva_flota
-borrar_flota
-entregar_paquetes
-saltar
+<{id int, name str}>list mostrar_flotas(void) raises ErrorAventuraNoSeleccionada
+void nueva_flota(int id, JSON rangos_piloto, JSON capacidades) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada
+
+void borrar_flota(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada
+void entregar_paquetes(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada
+void planificar_salto(int id, str codigo=None)
+
 #menos comunes
 activar_flota
 desactivar_flota
@@ -91,6 +94,7 @@ ver_registro_miembros_flota
 
 #interactuar con el mercado: común
 # comunes:
+nuevo_mercado
 cargar_bienes_disponibles
 #transferir_paquete_a # heredado
 # menos comunes:
