@@ -13,7 +13,7 @@ void cambiar_fecha_estelar(date nueva_fecha) raises ErrorAventuraNoSeleccionada
 void rollback(date nueva_fecha) raises ValueError, ErrorAventuraNoSeleccionada
 void salto_en_el_tiempo(date nueva_fecha) raises ValueError, ErrorAventuraNoSeleccionada
 void avanzar_dias(int dias) raises ValueError, ErrorAventuraNoSeleccionada
-void procesar_saltos(void)
+void procesar_saltos(bool desactivar_flotas_sin_saltos_previstos) raises FlotaSinSaltosPrevistos
 
 # interactuar con la tabla de bienes: poco común
 # menos comunes
@@ -40,11 +40,11 @@ void modificar_intervalos_regla(int id, <dict>list intervalos) raises ErrorIDNoE
 # interactuar con las flotas: común
 #comunes
 <{id int, name str}>list mostrar_flotas(void) raises ErrorAventuraNoSeleccionada
+<{id int name str}>list mostrar_naves_de_flota(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoExiste
 void nueva_flota(int id, JSON rangos_piloto, JSON capacidades) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada
-
 void borrar_flota(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada
 void entregar_paquetes(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada
-void planificar_salto(int id, str codigo=None)
+void planificar_salto(int id) raises ErrorIdNoExiste
 
 #menos comunes
 activar_flota

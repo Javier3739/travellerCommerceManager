@@ -96,8 +96,9 @@ FLOTA:
     - mayor_rango_socializar INT
     - mayor_rango_callejeo INT
     - mayor_bono_soc INT
-    - planeta_actual STR
+    - planeta_actual MERCADO
     - naves <NAVE>list
+    - proximo_salto MERCADO
     * VOID __init__(id INT, nombre STR, esta_activa BOOL, mayor_rango_marina INT, mayor_rango_explorador INT, mayor_rango_broker INT, mayor_rango_socializar INT, mayor_rango_callejeo INT, mayor_bono_soc INT, planeta_actual STR)
     * VOID viajar(nuevo_sistema STR)
 	* 
