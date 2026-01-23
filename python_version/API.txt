@@ -11,6 +11,7 @@ void cambiar_narrador(str nuevo_nombre) raises ErrorAventuraNoSeleccionada
 void cambiar_fecha_estelar(date nueva_fecha) raises ErrorAventuraNoSeleccionada
 #poco comunes
 void rollback(date nueva_fecha) raises ValueError, ErrorAventuraNoSeleccionada
+DATE ver_maximo_rollback(void) raises ErrorAventuraNoSeleccionada
 void salto_en_el_tiempo(date nueva_fecha) raises ValueError, ErrorAventuraNoSeleccionada
 void avanzar_dias(int dias) raises ValueError, ErrorAventuraNoSeleccionada
 void procesar_saltos(bool desactivar_flotas_sin_saltos_previstos) raises FlotaSinSaltosPrevistos
@@ -43,50 +44,49 @@ void modificar_intervalos_regla(int id, <dict>list intervalos) raises ErrorIDNoE
 <{id int name str}>list mostrar_naves_de_flota(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoExiste
 void nueva_flota(int id, JSON rangos_piloto, JSON capacidades) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada
 void borrar_flota(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada
-void entregar_paquetes(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada
-void planificar_salto(int id) raises ErrorIdNoExiste
-
+void entregar_paquetes(int id) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada
+void planificar_salto(int id) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada
 #menos comunes
-activar_flota
-desactivar_flota
-cambiar_rango_piloto
-cambiar_habilidades_tripulacion
+void activar_flota(int id_flota) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada
+void desactivar_flota(int id_flota) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada
+void cambiar_rango_piloto(int id_flota, JSON nuevos_valores) raises ErrorIDNoExiste, ErrorJSONInvalido, ErrorAventuraNoSeleccionada
+cambiar_habilidades_tripulacion(int id_flota, JSON nuevos_valores) raises ErrorIDNoExiste, ErrorJSONInvalido, ErrorAventuraNoSeleccionada
 
 
 # interactuar con el registro de viaje: menos común
 # comunes
-ver_registro_viajes_flota
+JSON ver_registro_viajes_flota(void) raises ErrorAventuraNoSeleccionada
 
 # interactuar con los lugares (comunes de naves y mercados) 
-transferir_paquete_a
-cambiar_nombre
-crear_paquete_especial
+void transferir_paquete_a(id_emisor int, id_receptor int, id_paquete int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+void cambiar_nombre_lugar(id int, nombre str) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada
+void crear_paquete_especial(JSON paquete) raises ErrorJSONInvalido, ErrorAventuraNoSeleccionada
 
 # interactuar con las naves: menos común
 # comunes
-nueva_nave
-cargar_nave
-eliminar_nave
+void nueva_nave()
+void eliminar_nave(id_nave int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
 # menos comunes
-tirar_paquete
+tirar_paquete(id_paquete int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
 entregar_paquete # destruye el paquete y cobra el pago por la entrega.
 transferir_paquete_a # heredado, transfiere algo entre naves, o carga y descarga del mercado, por ejemplo.
 # poco comunes
-cambiar_carga_maxima
-cambiar_auxiliar_total
-cambiar_mayor_auxiliar
-cambiar_camarotes_totales
-cambiar_literas_frias
-cambiar_combustible
-cambiar_salto
-armar_nave
-desarmar_nave
-cambiar_mantenimiento
-cambiar_hipoteca
-refinanciar_hipoteca
-
-cambiar_nombre # heredado
-crear_paquete_especial # heredado
+void cambiar_carga_maxima(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+cambiar_auxiliar_total(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+cambiar_mayor_auxiliar(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+cambiar_camarotes_totales(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+cambiar_literas_frias(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+cambiar_combustible(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+cambiar_salto(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+void armar_nave(void)
+void desarmar_nave(void)
+cambiar_mantenimiento(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+cambiar_hipoteca(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+reducir_hipoteca(id_nave int, ["cantidad fija"|"porcentaje"] str, cantidad int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+refinanciar_hipoteca(id_nave int, incremento_plazo_en_anios int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+(cambiar_nombre # heredado
+crear_paquete_especial # heredado)
+void cambiar_de_flota(id_nave int, id_flota_destino int)
 
 #interactuar con el registro de flotas: menos común
 #común
