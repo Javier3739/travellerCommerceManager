@@ -30,27 +30,27 @@ void cambiar_pago(int nuevo_valor, int saltos) raises ValueError, ErrorAventuraN
 <{id int, nombre str}>list ver_reglas(void) raises ErrorAventuraNoSeleccionada
 <dict>list ver_detalles_regla(int id_regla) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
 void importar_reglas_json(JSON nuevas_reglas) raises JSONParseError, ErrorAventuraNoSeleccionada
-void importar_reglas_aventura(int id_av) raises ErrorAventuraNoSeleccionada
+void importar_reglas_aventura(int id_av) raises ErrorAventuraNoSeleccionada, ErrorIDNoEncontrado
 # poco comunes
 void nueva_regla(TIPO tipo, AMBITO ambito, str nombre) raises ErrorAventuraNoSeleccionada, ValueError
-void borrar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-void activar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-void desactivar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-void modificar_intervalos_regla(int id, <dict>list intervalos) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ValueError
+void borrar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void activar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void desactivar_regla(int id) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void modificar_intervalos_regla(int id, <dict>list intervalos) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ValueError, ErrorIDNoPerteneceAAventura
 
 # interactuar con las flotas: común
 #comunes
 <{id int, name str}>list mostrar_flotas(void) raises ErrorAventuraNoSeleccionada
-<{id int name str}>list mostrar_naves_de_flota(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoExiste
-void nueva_flota(int id, JSON rangos_piloto, JSON capacidades) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada
-void borrar_flota(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada
-void entregar_paquetes(int id) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada
-void planificar_salto(int id) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada
+<{id int name str}>list mostrar_naves_de_flota(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoExiste, ErrorIDNoPerteneceAAventura
+void nueva_flota(int id, JSON rangos_piloto, JSON capacidades) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void borrar_flota(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void entregar_paquetes(int id) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void planificar_salto(int id) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 #menos comunes
-void activar_flota(int id_flota) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada
-void desactivar_flota(int id_flota) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada
-void cambiar_rango_piloto(int id_flota, JSON nuevos_valores) raises ErrorIDNoExiste, ErrorJSONInvalido, ErrorAventuraNoSeleccionada
-cambiar_habilidades_tripulacion(int id_flota, JSON nuevos_valores) raises ErrorIDNoExiste, ErrorJSONInvalido, ErrorAventuraNoSeleccionada
+void activar_flota(int id_flota) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void desactivar_flota(int id_flota) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void cambiar_rango_piloto(int id_flota, JSON nuevos_valores) raises ErrorIDNoExiste, ErrorJSONInvalido, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_habilidades_tripulacion(int id_flota, JSON nuevos_valores) raises ErrorIDNoExiste, ErrorJSONInvalido, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 
 
 # interactuar con el registro de viaje: menos común
@@ -58,57 +58,57 @@ cambiar_habilidades_tripulacion(int id_flota, JSON nuevos_valores) raises ErrorI
 JSON ver_registro_viajes_flota(void) raises ErrorAventuraNoSeleccionada
 
 # interactuar con los lugares (comunes de naves y mercados) 
-void transferir_paquete_a(id_emisor int, id_receptor int, id_paquete int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-void cambiar_nombre_lugar(id int, nombre str) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada
-void crear_paquete_especial(JSON paquete) raises ErrorJSONInvalido, ErrorAventuraNoSeleccionada
+void transferir_paquete_a(id_emisor int, id_receptor int, id_paquete int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void cambiar_nombre_lugar(id int, nombre str) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void crear_paquete_especial(JSON paquete) raises ErrorJSONInvalido, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 
 # interactuar con las naves: menos común
 # comunes
-void nueva_nave()
-void eliminar_nave(id_nave int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+int nueva_nave()
+void eliminar_nave(id_nave int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 # menos comunes
-tirar_paquete(id_paquete int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-entregar_paquete # destruye el paquete y cobra el pago por la entrega.
+void tirar_paquete(id_paquete int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void entregar_paquete(id_paquete int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura # destruye el paquete y cobra el pago por la entrega.
 transferir_paquete_a # heredado, transfiere algo entre naves, o carga y descarga del mercado, por ejemplo.
 # poco comunes
-void cambiar_carga_maxima(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-cambiar_auxiliar_total(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-cambiar_mayor_auxiliar(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-cambiar_camarotes_totales(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-cambiar_literas_frias(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-cambiar_combustible(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-cambiar_salto(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-void armar_nave(void)
-void desarmar_nave(void)
-cambiar_mantenimiento(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-cambiar_hipoteca(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-reducir_hipoteca(id_nave int, ["cantidad fija"|"porcentaje"] str, cantidad int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
-refinanciar_hipoteca(id_nave int, incremento_plazo_en_anios int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada
+void cambiar_carga_maxima(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_auxiliar_total(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_mayor_auxiliar(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_camarotes_totales(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_literas_frias(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_combustible(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_salto(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void armar_nave(id_nave int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void desarmar_nave(id_nave int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_mantenimiento(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+cambiar_hipoteca(id_nave int, nuevo_valor int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+reducir_hipoteca(id_nave int, ["cantidad fija"|"porcentaje"] str, cantidad int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+refinanciar_hipoteca(id_nave int, incremento_plazo_en_anios int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 (cambiar_nombre # heredado
 crear_paquete_especial # heredado)
-void cambiar_de_flota(id_nave int, id_flota_destino int)
+void cambiar_de_flota(id_nave int, id_flota_destino int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 
 #interactuar con el registro de flotas: menos común
 #común
-ver_registro_miembros_flota
+JSON ver_registro_miembros_flota(void) raises ErrorAventuraNoSeleccionada
 
 #interactuar con el mercado: común
 # comunes:
-nuevo_mercado
-cargar_bienes_disponibles
+int nuevo_mercado(codigo_planeta str) raises ErrorAventuraNoSeleccionada, ValueError
+void cargar_bienes_disponibles(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura, ErrorIDNoEncontrado
 #transferir_paquete_a # heredado
 # menos comunes:
-calcular_bono_pasajeros
-calcular_dados_pasajeros
-calcular_bono_mercancias
-calcular_dados_mercancias
-calcular_bono_correo
-calcular_bienes_disponibles
-modificar_bienes_disponibles
-cambiar_codigo_planeta
+int calcular_bono_pasajeros(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+int calcular_dados_pasajeros(result int) raises ValueError
+int calcular_bono_mercancias(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+int calcular_dados_mercancias(result int) raises ValueError
+int calcular_bono_correo(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+int calcular_bienes_disponibles(<int>list resultados_tiradas, id_flota int) raises ValueError, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void modificar_bienes_disponibles(<dict> paquetes, id_flota int) raises ValueError, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void cambiar_codigo_planeta(nuevo_codigo str, id_mercado int)
 
 #interactuar con el registro de paquetes
-ver_registro_paquetes
+JSON ver_registro_paquetes
 
 #interactuar con el registro contable
 ver_registro_operaciones
@@ -116,3 +116,4 @@ nueva_operacion
 activar_operacion
 desactivar_operacion
 cambiar_notas
+
