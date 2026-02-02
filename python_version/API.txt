@@ -108,7 +108,7 @@ void modificar_bienes_disponibles(<dict> paquetes, id_flota int) raises ValueErr
 void cambiar_codigo_planeta(nuevo_codigo str, id_mercado int)
 
 #interactuar con el registro de paquetes
-JSON ver_registro_paquetes
+JSON ver_registro_paquetes(void) raises ErrorAventuraNoSeleccionada
 
 #interactuar con el registro contable
 ver_registro_operaciones
