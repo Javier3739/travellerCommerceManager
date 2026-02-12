@@ -1,0 +1,35 @@
+					Preparado	Creando pruebas	En proceso	En testeo	Hecho
+-Aventura-
+basicos aventura	X
+saltar
+manipular fecha
+-Bienes-
+basicos bienes
+-Reglas-
+basicos reglas
+importar reglas
+modificar intervalos
+-Flotas-
+basicos flotas
+entregar paquetes
+planificar saltos
+mover naves
+-RegistroViajes-
+ver registro
+-Lugar-
+todos
+-Nave-
+básicos nave
+manejar paquetes
+-RegistroFlota-
+ver registro
+-Mercado-
+básicos
+calcular bonos
+calcular dados
+-Paquete-
+cambiar datos
+-RegistroPaquetes-
+ver registro
+-RegistroContable-
+básicos

@@ -41,11 +41,12 @@ void modificar_intervalos_regla(int id, <dict>list intervalos) raises ErrorIDNoE
 # interactuar con las flotas: común
 #comunes
 <{id int, name str}>list mostrar_flotas(void) raises ErrorAventuraNoSeleccionada
-<{id int name str}>list mostrar_naves_de_flota(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoExiste, ErrorIDNoPerteneceAAventura
 void nueva_flota(int id, JSON rangos_piloto, JSON capacidades) raises ErrorNombreYaExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 void borrar_flota(int id) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+<{id int name str}>list mostrar_naves_de_flota(id_flota int) raises ErrorAventuraNoSeleccionada, ErrorIDNoExiste, ErrorIDNoPerteneceAAventura
 void entregar_paquetes(int id) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 void planificar_salto(int id) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+void transfiere_nave(int id_flota_inicio, int id_flota_destino, int id_nave) raises ErrorIdNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura, ErrorNaveNoPerteneceAFlota
 #menos comunes
 void activar_flota(int id_flota) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 void desactivar_flota(int id_flota) raises ErrorIDNoExiste, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
@@ -64,7 +65,8 @@ void crear_paquete_especial(JSON paquete) raises ErrorJSONInvalido, ErrorAventur
 
 # interactuar con las naves: menos común
 # comunes
-int nueva_nave()
+JSON mostrar_datos(id_nave int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
+int nueva_nave(id_flota int)
 void eliminar_nave(id_nave int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 # menos comunes
 void tirar_paquete(id_paquete int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
@@ -86,7 +88,6 @@ reducir_hipoteca(id_nave int, ["cantidad fija"|"porcentaje"] str, cantidad int) 
 refinanciar_hipoteca(id_nave int, incremento_plazo_en_anios int) raises ValueError, ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 (cambiar_nombre # heredado
 crear_paquete_especial # heredado)
-void cambiar_de_flota(id_nave int, id_flota_destino int) raises ErrorIDNoEncontrado, ErrorAventuraNoSeleccionada, ErrorIDNoPerteneceAAventura
 
 #interactuar con el registro de flotas: menos común
 #común
