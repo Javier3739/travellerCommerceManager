@@ -9,8 +9,19 @@ class DBMock(object):
                 ok = 1
         if ok == 0:
             self.aventuras.append(aventura)
-    def busca_aventura_por_nombre(self, nombre):
+    def buscar_aventura_por_nombre(self, nombre):
         for aventura in self.aventuras:
             if nombre == aventura.nombre:
                 return aventura
         raise ValueError
+    def buscar_aventura_por_id(self, id_av):
+        for aventura in self.aventuras:
+            if id_av == aventura.id:
+                return aventura
+        raise ValueError
+    def mostrar_aventuras(self):
+        pass
+    def mostrar_datos_aventura(self, id_av):
+        pass
+    def cargar_aventura(self, id_av):
+        pass
